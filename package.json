@@ -1,0 +1,28 @@
+{
+  "name": "@r/private",
+  "version": "0.0.1",
+  "description": "first-party reddit apis",
+  "main": "bin/index.js",
+  "scripts": {
+    "build": "blueprints --production",
+    "watch": "blueprints --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/reddit/node-private.git"
+  },
+  "author": "Jack Lawson <jack@reddit.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/reddit/node-private/issues"
+  },
+  "homepage": "https://github.com/reddit/node-private#readme",
+  "peerDependencies": {
+    "superagent": "^1.8.3",
+    "snoode": "^3.1.1"
+  },
+  "devDependencies": {
+    "@r/build": "0.0.7"
+  }
+}
