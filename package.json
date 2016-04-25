@@ -1,6 +1,6 @@
 {
   "name": "@r/private",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "first-party reddit apis",
   "main": "bin/index.js",
   "scripts": {
@@ -24,7 +24,7 @@
     "snoode": "^3.1.1"
   },
   "devDependencies": {
-    "@r/build": "0.0.7",
+    "@r/build": "^0.0.9",
     "lodash": "^4.11.1"
   }
 }
