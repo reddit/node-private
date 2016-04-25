@@ -4,6 +4,7 @@
   "description": "first-party reddit apis",
   "main": "bin/index.js",
   "scripts": {
+    "lint": "eslint lib",
     "build": "blueprints --production",
     "watch": "blueprints --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,6 +26,9 @@
   },
   "devDependencies": {
     "@r/build": "^0.0.9",
+    "babel-eslint": "^6.0.4",
+    "eslint": "^2.8.0",
+    "eslint-plugin-babel": "^3.2.0",
     "lodash": "^4.11.1"
   }
 }
