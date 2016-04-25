@@ -1,5 +1,5 @@
 Contributing to node-private
-============================
+=============================
 
 So you want to contribute to node-private? Fantastic! Here's a brief overview on
 how best to do so.
