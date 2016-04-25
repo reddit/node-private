@@ -14,11 +14,11 @@ Login, Register, and Token Refresh
 import API from '@r/api-client';
 import { privateAPI } from '@r/private';
 
-API = privateAPI(API);
+var api = new (privateAPI(API))(options);
 
-const token = await API.login(username, password);
-const newToken = await API.refreshToken(token.refresh_token);
+const token = await api.login(username, password);
+const newToken = await api.refreshToken(token.refresh_token);
 
-const token = await API.convertCookiesToAuthToken(cookies.split(';'));
+const token = await api.convertCookiesToAuthToken(cookies.split(';'));
 ```
 
