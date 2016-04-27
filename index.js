@@ -1,13 +1,13 @@
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("atob"), require("superagent"), require("url"));
+		module.exports = factory(require("superagent"), require("url"));
 	else if(typeof define === 'function' && define.amd)
-		define(["atob", "superagent", "url"], factory);
+		define(["superagent", "url"], factory);
 	else if(typeof exports === 'object')
-		exports["index.js"] = factory(require("atob"), require("superagent"), require("url"));
+		exports["index.js"] = factory(require("superagent"), require("url"));
 	else
-		root["index.js"] = factory(root["atob"], root["superagent"], root["url"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
+		root["index.js"] = factory(root["superagent"], root["url"]);
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -47,7 +47,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -60,9 +60,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url__ = __webpack_require__(4);
 	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url___default = __WEBPACK_IMPORTED_MODULE_1_url__ && __WEBPACK_IMPORTED_MODULE_1_url__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_1_url__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_1_url__; }
 	/* harmony import */ Object.defineProperty(__WEBPACK_IMPORTED_MODULE_1_url___default, 'a', { get: __WEBPACK_IMPORTED_MODULE_1_url___default });
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_atob__ = __webpack_require__(2);
-	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_atob___default = __WEBPACK_IMPORTED_MODULE_2_atob__ && __WEBPACK_IMPORTED_MODULE_2_atob__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_2_atob__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_2_atob__; }
-	/* harmony import */ Object.defineProperty(__WEBPACK_IMPORTED_MODULE_2_atob___default, 'a', { get: __WEBPACK_IMPORTED_MODULE_2_atob___default });
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Base64__ = __webpack_require__(1);
+	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Base64___default = __WEBPACK_IMPORTED_MODULE_2_Base64__ && __WEBPACK_IMPORTED_MODULE_2_Base64__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_2_Base64__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_2_Base64__; }
+	/* harmony import */ Object.defineProperty(__WEBPACK_IMPORTED_MODULE_2_Base64___default, 'a', { get: __WEBPACK_IMPORTED_MODULE_2_Base64___default });
 
 	/* harmony export */ Object.defineProperty(exports, "a", {configurable: false, enumerable: true, get: function() { return _default; }});
 
@@ -132,7 +132,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	      value: function refreshToken(_refreshToken) {
 	        return new Promise(function (resolve, reject) {
 	          var endpoint = this.config.oauthAppOrigin + '/api/v1/access_token';
-	          var s = /* harmony import */__WEBPACK_IMPORTED_MODULE_2_atob___default.a.bind()(this.config.clientId + ':' + this.config.clientSecret);
+	          var s = atob(this.config.clientId + ':' + this.config.clientSecret);
 
 	          var basicAuth = 'Basic ' + s;
 
@@ -231,7 +231,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                redirect_uri: redirect_uri
 	              };
 
-	              var s = /* harmony import */__WEBPACK_IMPORTED_MODULE_2_atob___default.a.bind()(clientId + ':' + clientSecret);
+	              var s = /* harmony import */__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"].bind()(clientId + ':' + clientSecret);
 
 	              var basicAuth = 'Basic ' + s;
 
@@ -264,17 +264,78 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	;(function () {
+
+	  var object =  true ? exports : this; // #8: web workers
+	  var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+
+	  function InvalidCharacterError(message) {
+	    this.message = message;
+	  }
+	  InvalidCharacterError.prototype = new Error;
+	  InvalidCharacterError.prototype.name = 'InvalidCharacterError';
+
+	  // encoder
+	  // [https://gist.github.com/999166] by [https://github.com/nignag]
+	  object.btoa || (
+	  object.btoa = function (input) {
+	    var str = String(input);
+	    for (
+	      // initialize result and counter
+	      var block, charCode, idx = 0, map = chars, output = '';
+	      // if the next str index does not exist:
+	      //   change the mapping table to "="
+	      //   check if d has no fractional digits
+	      str.charAt(idx | 0) || (map = '=', idx % 1);
+	      // "8 - idx % 1 * 8" generates the sequence 2, 4, 6, 8
+	      output += map.charAt(63 & block >> 8 - idx % 1 * 8)
+	    ) {
+	      charCode = str.charCodeAt(idx += 3/4);
+	      if (charCode > 0xFF) {
+	        throw new InvalidCharacterError("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");
+	      }
+	      block = block << 8 | charCode;
+	    }
+	    return output;
+	  });
+
+	  // decoder
+	  // [https://gist.github.com/1020396] by [https://github.com/atk]
+	  object.atob || (
+	  object.atob = function (input) {
+	    var str = String(input).replace(/=+$/, '');
+	    if (str.length % 4 == 1) {
+	      throw new InvalidCharacterError("'atob' failed: The string to be decoded is not correctly encoded.");
+	    }
+	    for (
+	      // initialize result and counters
+	      var bc = 0, bs, buffer, idx = 0, output = '';
+	      // get next character
+	      buffer = str.charAt(idx++);
+	      // character found in table? initialize bit storage and add its ascii value;
+	      ~buffer && (bs = bc % 4 ? bs * 64 + buffer : buffer,
+	        // and if not first of each 4 characters,
+	        // convert the first 8 bits to one ascii character
+	        bc++ % 4) ? output += String.fromCharCode(255 & bs >> (-2 * bc & 6)) : 0
+	    ) {
+	      // try to find character in table (0-63, not found => -1)
+	      buffer = chars.indexOf(buffer);
+	    }
+	    return output;
+	  });
+
+	}());
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_es6_js__ = __webpack_require__(0);
 
 
 	var privateAPI = /* harmony import */__WEBPACK_IMPORTED_MODULE_0__api_es6_js__["a"];
 	/* harmony export */ Object.defineProperty(exports, "privateAPI", {configurable: false, enumerable: true, get: function() { return privateAPI; }});
-
-/***/ },
-/* 2 */
-/***/ function(module, exports) {
-
-	module.exports = require("atob");
 
 /***/ },
 /* 3 */
