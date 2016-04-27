@@ -240,10 +240,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                'Authorization': basicAuth
 	              }, _this3.config.defaultHeaders);
 
-	              console.log(endpoint, s, basicAuth, headers);
-
 	              /* harmony import */__WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).send(postData).type('form').end(function (err, res) {
-	                console.log('err:', err, 'res:', res);
 	                if (err || !res.ok) {
 	                  if (err.timeout) {
 	                    err.status = 504;
