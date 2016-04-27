@@ -2,7 +2,7 @@
   "name": "@r/private",
   "version": "0.0.5",
   "description": "first-party reddit apis",
-  "main": "bin/index.js",
+  "main": "./index.js",
   "scripts": {
     "lint": "eslint lib",
     "build": "blueprints --production",

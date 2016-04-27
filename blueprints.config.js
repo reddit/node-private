@@ -1,15 +1,12 @@
 module.exports = [{
   name: 'index',
   webpack: {
-    entry: './lib/private.es6.js',
-    output: {
-      generator: 'simple',
-      dest: './bin',
+    entry: {
+      index: './lib/private.es6.js',
     },
-    externals: {
-      atob: 'atob',
-      superagent: 'superagent',
-      url: 'url',
+    output: {
+      library: "[name].js",
+      libraryTarget: "umd",
     },
     resolve: {
       generator: 'npm-and-modules',
@@ -22,8 +19,13 @@ module.exports = [{
     plugins: [
       'production-loaders',
       'set-node-env',
-      'minify-and-treeshake',
+      // 'minify-and-treeshake',
       'abort-if-errors',
     ],
+    externals: {
+      atob: 'commonjs atob',
+      superagent: 'commonjs superagent',
+      url: 'commonjs url',
+    },
   },
 }];
