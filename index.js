@@ -133,7 +133,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var _this3 = this;
 
 	        return new Promise(function (resolve, reject) {
-	          var endpoint = _this3.config.oauthAppOrigin + '/api/v1/access_token';
+	          var endpoint = _this3.config.origin + '/api/v1/access_token';
 	          var s = /* harmony import */__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"].bind()(_this3.config.clientId + ':' + _this3.config.clientSecret);
 
 	          var basicAuth = 'Basic ' + s;
