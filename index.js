@@ -130,9 +130,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	      key: 'refreshToken',
 	      value: function refreshToken(_refreshToken) {
+	        var _this3 = this;
+
 	        return new Promise(function (resolve, reject) {
-	          var endpoint = this.config.oauthAppOrigin + '/api/v1/access_token';
-	          var s = atob(this.config.clientId + ':' + this.config.clientSecret);
+	          var endpoint = _this3.config.oauthAppOrigin + '/api/v1/access_token';
+	          var s = /* harmony import */__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"].bind()(_this3.config.clientId + ':' + _this3.config.clientSecret);
 
 	          var basicAuth = 'Basic ' + s;
 
@@ -142,9 +144,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	          };
 
 	          var headers = _extends({
-	            'User-Agent': this.config.userAgent,
+	            'User-Agent': _this3.config.userAgent,
 	            'Authorization': basicAuth
-	          }, this.config.defaultHeaders);
+	          }, _this3.config.defaultHeaders);
 
 	          /* harmony import */__WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).type('form').send(data).end(function (err, res) {
 	            if (err || !res.ok) {
@@ -166,19 +168,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }, {
 	      key: 'convertCookiesToAuthToken',
 	      value: function convertCookiesToAuthToken(cookies) {
-	        var _this3 = this;
+	        var _this4 = this;
 
 	        return new Promise(function (resolve, reject) {
 	          if (!cookies) {
 	            reject('No cookies passed in');
 	          }
 
-	          var endpoint = _this3.config.origin + '/api/me.json';
+	          var endpoint = _this4.config.origin + '/api/me.json';
 
 	          var headers = _extends({
-	            'User-Agent': _this3.config.userAgent,
+	            'User-Agent': _this4.config.userAgent,
 	            cookie: cookies.join('; ')
-	          }, _this3.config.defaultHeaders);
+	          }, _this4.config.defaultHeaders);
 
 	          /* harmony import */__WEBPACK_IMPORTED_MODULE_0_superagent___default.a.get(endpoint).set(headers).end(function (err, res) {
 	            if (err || !res.ok) {
@@ -193,12 +195,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            var modhash = res.body.data.modhash;
-	            var endpoint = _this3.config.origin + '/api/v1/authorize';
+	            var endpoint = _this4.config.origin + '/api/v1/authorize';
 
-	            var redirect_uri = _this3.config.oauthAppOrigin + '/oauth2/token';
+	            var redirect_uri = _this4.config.oauthAppOrigin + '/oauth2/token';
 
-	            var clientId = _this3.config.clientId;
-	            var clientSecret = _this3.config.clientSecret;
+	            var clientId = _this4.config.clientId;
+	            var clientSecret = _this4.config.clientSecret;
 
 	            var postParams = {
 	              client_id: clientId,
@@ -223,7 +225,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	              var location = /* harmony import */__WEBPACK_IMPORTED_MODULE_1_url___default.a.parse(res.headers.location, true);
 	              var code = location.query.code;
 
-	              var endpoint = _this3.config.origin + '/api/v1/access_token';
+	              var endpoint = _this4.config.origin + '/api/v1/access_token';
 
 	              var postData = {
 	                grant_type: 'authorization_code',
@@ -236,9 +238,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	              var basicAuth = 'Basic ' + s;
 
 	              var headers = _extends({
-	                'User-Agent': _this3.config.userAgent,
+	                'User-Agent': _this4.config.userAgent,
 	                'Authorization': basicAuth
-	              }, _this3.config.defaultHeaders);
+	              }, _this4.config.defaultHeaders);
 
 	              /* harmony import */__WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).send(postData).type('form').end(function (err, res) {
 	                if (err || !res.ok) {

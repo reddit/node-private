@@ -20,8 +20,8 @@
   },
   "homepage": "https://github.com/reddit/node-private#readme",
   "peerDependencies": {
-    "superagent": "^1.8.3",
-    "snoode": "^3.1.1"
+    "superagent": "1.x",
+    "@r/api-client": "3.x"
   },
   "devDependencies": {
     "@r/build": "^0.0.9",
