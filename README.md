@@ -11,14 +11,17 @@ Login, Register, and Token Refresh
 ### Usage
 
 ```javascript
-import API from '@r/api-client';
-import { privateAPI } from '@r/private';
+import APIOptions from '@r/api-client';
+import { PrivateAPI } from '@r/private';
 
-var api = new (privateAPI(API))(options);
+const myAppOptions = {
+  ...APIOptions,
+  clientSecret: 'my-client-secret'
+  clientId: 'my-super-secret-app-id',
+};
 
-const token = await api.login(username, password);
-const newToken = await api.refreshToken(token.refresh_token);
+const token = await PrivateAPI.login(myAppOptions, username, password);
+const newToken = await PrivateAPI.refreshToken(myAppOptions, token.refresh_token);
 
-const token = await api.convertCookiesToAuthToken(cookies.split(';'));
+const token = await PrivateAPI.convertCookiesToAuthToken(myAppOptions, cookies.split(';'));
 ```
-
