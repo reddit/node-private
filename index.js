@@ -90,6 +90,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return x(err || res);
 	      }
 
+	      // the error response for login is different than most of the rest of
+	      // the api
+	      if (res.body.json && res.body.json.errors) {
+	        return x(res.body.json.errors);
+	      }
+
 	      var cookies = (res.header['set-cookie'] || []).map(function (c) {
 	        return c.split(';')[0];
 	      });
