@@ -1,6 +1,6 @@
 {
   "name": "@r/private",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "first-party reddit apis",
   "main": "./index.js",
   "scripts": {
