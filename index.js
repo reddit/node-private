@@ -92,7 +92,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	      // the error response for login is different than most of the rest of
 	      // the api
-	      if (res.body.json && res.body.json.errors) {
+	      if (res.body.json && res.body.json.errors && res.body.json.errors.length) {
 	        return x(res.body.json.errors);
 	      }
 
