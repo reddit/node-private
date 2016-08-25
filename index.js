@@ -7,7 +7,7 @@
 		exports["index.js"] = factory(require("superagent"), require("url"));
 	else
 		root["index.js"] = factory(root["superagent"], root["url"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__, __WEBPACK_EXTERNAL_MODULE_3__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_3__, __WEBPACK_EXTERNAL_MODULE_4__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -55,15 +55,6 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 		});
 /******/ 	};
 
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-
 /******/ 	// Object.prototype.hasOwnProperty.call
 /******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
 
@@ -71,7 +62,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -79,25 +70,20 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_superagent__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_superagent___default = __WEBPACK_IMPORTED_MODULE_0_superagent__ && __WEBPACK_IMPORTED_MODULE_0_superagent__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_0_superagent__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_0_superagent__; };
+/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_0_superagent___default, 'a', __WEBPACK_IMPORTED_MODULE_0_superagent___default);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_url___default = __WEBPACK_IMPORTED_MODULE_1_url__ && __WEBPACK_IMPORTED_MODULE_1_url__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_1_url__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_1_url__; };
+/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_1_url___default, 'a', __WEBPACK_IMPORTED_MODULE_1_url___default);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Base64__ = __webpack_require__(1);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_Base64___default = __WEBPACK_IMPORTED_MODULE_2_Base64__ && __WEBPACK_IMPORTED_MODULE_2_Base64__.__esModule ? function() { return __WEBPACK_IMPORTED_MODULE_2_Base64__['default'] } : function() { return __WEBPACK_IMPORTED_MODULE_2_Base64__; };
+/* harmony import */ __webpack_require__.d(__WEBPACK_IMPORTED_MODULE_2_Base64___default, 'a', __WEBPACK_IMPORTED_MODULE_2_Base64___default);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var _superagent = __webpack_require__(2);
 
-var _superagent2 = _interopRequireDefault(_superagent);
 
-var _url = __webpack_require__(3);
 
-var _url2 = _interopRequireDefault(_url);
-
-var _Base = __webpack_require__(1);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var SCOPES = 'history,identity,mysubreddits,read,subscribe,vote,submit,' + 'save,edit,account,creddits,flair,livemanage,modconfig,' + 'modcontributors,modflair,modlog,modothers,modposts,modself,' + 'modwiki,privatemessages,report,wikiedit,wikiread';
 
@@ -115,7 +101,7 @@ var login = function login(apiOptions, username, pass) {
       reject('Please set up a Reddit Oauth App, and pass in its secret as clientSecret to config.');
     }
 
-    _superagent2.default.post(apiOptions.origin + '/api/login/' + username).type('form').send({ user: username, passwd: pass, api_type: 'json' }).end(function (err, res) {
+    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(apiOptions.origin + '/api/login/' + username).type('form').send({ user: username, passwd: pass, api_type: 'json' }).end(function (err, res) {
       if (err || !res.ok) {
         return reject(err || res);
       }
@@ -140,7 +126,7 @@ var login = function login(apiOptions, username, pass) {
   });
 };
 
-var register = function register(apiOptions, username, password, email, newsletter) {
+var register = function register(apiOptions, username, password, email, newsletter, gRecaptchaResponse) {
   return new Promise(function (resolve, reject) {
     if (!apiOptions.oauthAppOrigin) {
       reject('Please set up a Reddit Oauth App, and pass in its URL as oauthAppOrigin to config.');
@@ -158,6 +144,7 @@ var register = function register(apiOptions, username, password, email, newslett
       user: username,
       passwd: password,
       passwd2: password,
+      'g-recaptcha-response': gRecaptchaResponse,
       api_type: 'json'
     };
 
@@ -174,14 +161,14 @@ var register = function register(apiOptions, username, password, email, newslett
     }
 
     var endpoint = apiOptions.origin + '/api/register';
-    var s = (0, _Base.btoa)(apiOptions.clientId + ':' + apiOptions.clientSecret);
+    var s = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"])(apiOptions.clientId + ':' + apiOptions.clientSecret);
     var basicAuth = 'Basic ' + s;
     var headers = _extends({
       'User-Agent': apiOptions.userAgent,
       'Authorization': basicAuth
     }, apiOptions.defaultHeaders);
 
-    _superagent2.default.post(endpoint).set(headers).type('form').send(data).timeout(10000).end(function (err, res) {
+    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).type('form').send(data).timeout(10000).end(function (err, res) {
       var obj = {};
       if (err || !res.ok) {
         obj.status = err.timeout ? 504 : res.status || 500;
@@ -230,7 +217,7 @@ var sessionExists = function sessionExists(res) {
 var refreshToken = function refreshToken(apiOptions, _refreshToken) {
   return new Promise(function (resolve, reject) {
     var endpoint = apiOptions.origin + '/api/v1/access_token';
-    var s = (0, _Base.btoa)(apiOptions.clientId + ':' + apiOptions.clientSecret);
+    var s = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"])(apiOptions.clientId + ':' + apiOptions.clientSecret);
 
     var basicAuth = 'Basic ' + s;
 
@@ -244,7 +231,7 @@ var refreshToken = function refreshToken(apiOptions, _refreshToken) {
       'Authorization': basicAuth
     }, apiOptions.defaultHeaders);
 
-    _superagent2.default.post(endpoint).set(headers).type('form').send(data).end(function (err, res) {
+    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).type('form').send(data).end(function (err, res) {
       if (err || !res.ok) {
         if (err.timeout) {
           err.status = 504;
@@ -275,7 +262,7 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
       cookie: cookies.join('; ')
     }, apiOptions.defaultHeaders);
 
-    _superagent2.default.get(endpoint).set(headers).end(function (err, res) {
+    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.get(endpoint).set(headers).end(function (err, res) {
       if (err || !res.ok) {
         if (err.timeout) {
           err.status = 504;
@@ -306,7 +293,7 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
 
       headers['x-modhash'] = modhash;
 
-      _superagent2.default.post(endpoint).set(headers).type('form').send(postParams).redirects(0).end(function (err, res) {
+      __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).type('form').send(postParams).redirects(0).end(function (err, res) {
         if (res.status !== 302) {
           return resolve(res.status || 500);
         }
@@ -315,7 +302,7 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
           return resolve(401);
         }
 
-        var location = _url2.default.parse(res.headers.location, true);
+        var location = __WEBPACK_IMPORTED_MODULE_1_url___default.a.parse(res.headers.location, true);
         var code = location.query.code;
 
         var endpoint = apiOptions.origin + '/api/v1/access_token';
@@ -326,7 +313,7 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
           redirect_uri: redirect_uri
         };
 
-        var s = (0, _Base.btoa)(clientId + ':' + clientSecret);
+        var s = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"])(clientId + ':' + clientSecret);
 
         var basicAuth = 'Basic ' + s;
 
@@ -335,7 +322,7 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
           'Authorization': basicAuth
         }, apiOptions.defaultHeaders);
 
-        _superagent2.default.post(endpoint).set(headers).send(postData).type('form').end(function (err, res) {
+        __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).send(postData).type('form').end(function (err, res) {
           if (err || !res.ok) {
             if (err.timeout) {
               err.status = 504;
@@ -350,7 +337,7 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
   });
 };
 
-exports.default = {
+/* harmony default export */ exports["a"] = {
   login: login,
   register: register,
   refreshToken: refreshToken,
@@ -426,35 +413,26 @@ exports.default = {
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-module.exports = require("superagent");
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__api_es6_js__ = __webpack_require__(0);
+
+/* harmony export */ __webpack_require__.d(exports, "PrivateAPI", function() { return PrivateAPI; });
+
+var PrivateAPI = __WEBPACK_IMPORTED_MODULE_0__api_es6_js__["a" /* default */];
 
 /***/ },
 /* 3 */
 /***/ function(module, exports) {
 
-module.exports = require("url");
+module.exports = require("superagent");
 
 /***/ },
 /* 4 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-"use strict";
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.PrivateAPI = undefined;
-
-var _apiEs = __webpack_require__(0);
-
-var _apiEs2 = _interopRequireDefault(_apiEs);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-var PrivateAPI = exports.PrivateAPI = _apiEs2.default;
+module.exports = require("url");
 
 /***/ }
 /******/ ])
