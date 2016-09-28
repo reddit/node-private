@@ -297,9 +297,9 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
         authorize: 'yes'
       };
 
-      headers['x-modhash'] = modhash;
+      var modhashedHeaders = _extends({}, headers, { 'x-modhash': modhash });
 
-      __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).type('form').send(postParams).redirects(0).end(function (err, res) {
+      __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(modhashedHeaders).type('form').send(postParams).redirects(0).end(function (err, res) {
         if (res.status !== 302) {
           return resolve(res.status || 500);
         }

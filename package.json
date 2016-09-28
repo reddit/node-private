@@ -24,7 +24,7 @@
     "@r/api-client": "3.x"
   },
   "devDependencies": {
-    "@r/build": "^0.0.9",
+    "@r/build": "^0.10.1",
     "babel-eslint": "^6.0.4",
     "eslint": "^2.8.0",
     "eslint-plugin-babel": "^3.2.0",
