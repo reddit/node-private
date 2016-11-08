@@ -93,7 +93,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var SCOPES = 'history,identity,mysubreddits,read,subscribe,vote,submit,' + 'save,edit,account,creddits,flair,livemanage,modconfig,' + 'modcontributors,modflair,modlog,modmail,modothers,modposts,modself,' + 'modwiki,privatemessages,report,wikiedit,wikiread';
 
-var login = function login(apiOptions, username, pass) {
+var login = function login(apiOptions, username, pass, orderedHeaders, clientUserAgent) {
   return new Promise(function (resolve, reject) {
     if (!apiOptions.oauthAppOrigin) {
       reject('Please set up a Reddit Oauth App, and pass in its URL as oauthAppOrigin to config.');
@@ -107,7 +107,12 @@ var login = function login(apiOptions, username, pass) {
       reject('Please set up a Reddit Oauth App, and pass in its secret as clientSecret to config.');
     }
 
-    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(apiOptions.origin + '/api/login/' + username).type('form').send({ user: username, passwd: pass, api_type: 'json' }).end(function (err, res) {
+    var headers = _extends({}, apiOptions.headers, {
+      'User-Agent': clientUserAgent + ' - ' + apiOptions.userAgent,
+      'X-Reddit-Debug': orderedHeaders.join(';')
+    });
+
+    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(apiOptions.origin + '/api/login/' + username).type('form').set(headers).send({ user: username, passwd: pass, api_type: 'json' }).end(function (err, res) {
       if (err || !res.ok) {
         return reject(err || res);
       }
@@ -124,7 +129,7 @@ var login = function login(apiOptions, username, pass) {
       var cookies = parseCookies(res);
       var redditSessionExists = sessionExists(res);
       if (redditSessionExists) {
-        return convertCookiesToAuthToken(apiOptions, cookies).then(resolve, reject);
+        return convertCookiesToAuthToken(apiOptions, cookies, orderedHeaders, clientUserAgent).then(resolve, reject);
       }
 
       reject('Invalid login information.');
@@ -132,7 +137,8 @@ var login = function login(apiOptions, username, pass) {
   });
 };
 
-var register = function register(apiOptions, username, password, email, newsletter, gRecaptchaResponse) {
+var register = function register(apiOptions, username, password, email, newsletter, gRecaptchaResponse, orderedHeaders, clientUserAgent) {
+
   return new Promise(function (resolve, reject) {
     if (!apiOptions.oauthAppOrigin) {
       reject('Please set up a Reddit Oauth App, and pass in its URL as oauthAppOrigin to config.');
@@ -169,10 +175,11 @@ var register = function register(apiOptions, username, password, email, newslett
     var endpoint = apiOptions.origin + '/api/register';
     var s = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"])(apiOptions.clientId + ':' + apiOptions.clientSecret);
     var basicAuth = 'Basic ' + s;
-    var headers = _extends({
-      'User-Agent': apiOptions.userAgent,
-      'Authorization': basicAuth
-    }, apiOptions.defaultHeaders);
+    var headers = _extends({}, apiOptions.headers, {
+      'User-Agent': clientUserAgent + ' - ' + apiOptions.userAgent,
+      'Authorization': basicAuth,
+      'X-Reddit-Debug': orderedHeaders.join(';')
+    });
 
     __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).type('form').send(data).timeout(10000).end(function (err, res) {
       var obj = {};
@@ -193,7 +200,7 @@ var register = function register(apiOptions, username, password, email, newslett
       var cookies = parseCookies(res);
       var redditSessionExists = sessionExists(res);
       if (redditSessionExists) {
-        return convertCookiesToAuthToken(apiOptions, cookies).then(resolve, reject);
+        return convertCookiesToAuthToken(apiOptions, cookies, orderedHeaders, clientUserAgent).then(resolve, reject);
       }
       reject('UNKNOWN_ERROR');
     });
@@ -220,7 +227,7 @@ var sessionExists = function sessionExists(res) {
   return res.header['set-cookie'].join('').indexOf('reddit_session') > -1;
 };
 
-var refreshToken = function refreshToken(apiOptions, _refreshToken) {
+var refreshToken = function refreshToken(apiOptions, _refreshToken, orderedHeaders, clientUserAgent) {
   return new Promise(function (resolve, reject) {
     var endpoint = apiOptions.origin + '/api/v1/access_token';
     var s = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_2_Base64__["btoa"])(apiOptions.clientId + ':' + apiOptions.clientSecret);
@@ -232,10 +239,11 @@ var refreshToken = function refreshToken(apiOptions, _refreshToken) {
       refresh_token: _refreshToken
     };
 
-    var headers = _extends({
-      'User-Agent': apiOptions.userAgent,
-      'Authorization': basicAuth
-    }, apiOptions.defaultHeaders);
+    var headers = _extends({}, apiOptions.headers, {
+      'Authorization': basicAuth,
+      'User-Agent': clientUserAgent + ' - ' + apiOptions.userAgent,
+      'X-Reddit-Debug': orderedHeaders.join(';')
+    });
 
     __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(endpoint).set(headers).type('form').send(data).end(function (err, res) {
       if (err || !res.ok) {
@@ -255,7 +263,7 @@ var refreshToken = function refreshToken(apiOptions, _refreshToken) {
   });
 };
 
-var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, cookies) {
+var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, cookies, orderedHeaders, clientUserAgent) {
   return new Promise(function (resolve, reject) {
     if (!cookies) {
       reject('No cookies passed in');
@@ -263,10 +271,11 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
 
     var endpoint = apiOptions.origin + '/api/me.json';
 
-    var headers = _extends({
-      'User-Agent': apiOptions.userAgent,
+    var headers = _extends({}, apiOptions.headers, {
+      'User-Agent': clientUserAgent + ' - ' + apiOptions.userAgent,
+      'X-Reddit-Debug': orderedHeaders.join(';'),
       cookie: cookies.join('; ')
-    }, apiOptions.defaultHeaders);
+    });
 
     __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.get(endpoint).set(headers).end(function (err, res) {
       if (err || !res.ok) {
