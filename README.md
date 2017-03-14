@@ -18,6 +18,7 @@ const myAppOptions = {
   ...APIOptions,
   clientSecret: 'my-client-secret'
   clientId: 'my-super-secret-app-id',
+  withEmailScope: false, // only supported for non-embedded apps
 };
 
 const token = await PrivateAPI.login(myAppOptions, username, password);
