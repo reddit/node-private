@@ -297,7 +297,8 @@ var convertCookiesToAuthToken = function convertCookiesToAuthToken(apiOptions, c
       var clientId = apiOptions.clientId;
       var clientSecret = apiOptions.clientSecret;
 
-      var scope = SCOPES + (apiOptions.withEmailScope ? ',email' : '');
+      var additionalScopes = apiOptions.additionalScopes ? ',' + apiOptions.additionalScopes : '';
+      var scope = SCOPES + additionalScopes;
 
       var postParams = {
         client_id: clientId,
