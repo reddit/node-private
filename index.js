@@ -93,7 +93,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var SCOPES = 'history,identity,mysubreddits,read,subscribe,vote,submit,' + 'save,edit,account,creddits,flair,livemanage,modconfig,' + 'modcontributors,modflair,modlog,modmail,modothers,modposts,modself,' + 'modwiki,privatemessages,report,wikiedit,wikiread';
 
-var login = function login(apiOptions, username, pass, orderedHeaders, clientUserAgent) {
+var login = function login(apiOptions, username, pass, otp, orderedHeaders, clientUserAgent) {
   return new Promise(function (resolve, reject) {
     if (!apiOptions.oauthAppOrigin) {
       reject('Please set up a Reddit Oauth App, and pass in its URL as oauthAppOrigin to config.');
@@ -112,9 +112,14 @@ var login = function login(apiOptions, username, pass, orderedHeaders, clientUse
       'X-Reddit-Debug': orderedHeaders.join(';')
     });
 
-    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(apiOptions.origin + '/api/login/' + username).type('form').set(headers).send({ user: username, passwd: pass, api_type: 'json' }).end(function (err, res) {
+    __WEBPACK_IMPORTED_MODULE_0_superagent___default.a.post(apiOptions.origin + '/api/login/' + username).type('form').set(headers).send({ user: username, passwd: pass, otp: otp, api_type: 'json' }).end(function (err, res) {
       if (err || !res.ok) {
         return reject(err || res);
+      }
+
+      var details = parseDetails(res);
+      if (details === 'TWO_FA_REQUIRED'){
+        resolve(details);
       }
 
       var errors = parseErrors(res);
@@ -213,6 +218,13 @@ var parseErrors = function parseErrors(res) {
     return res.body.json.errors;
   }
   return [];
+};
+
+// Parses the details for login function
+var parseDetails = function parseDetails(res) {
+  if (res.body.json && res.body.json.data) {
+    return res.body.json.data.details;
+  }
 };
 
 // Parses the cookies for the login and register functions
